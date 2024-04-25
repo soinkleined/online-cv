@@ -17,7 +17,7 @@ sidebar:
     phone: +44 (0) 7791296237
     timezone: Europe/London Timezone
     citizenship:
-    website: blog.webjeda.com #do not add http://
+    website: #do not add http://
     linkedin: davidjklein
     xing: 
     github: soinkleined
@@ -62,14 +62,6 @@ education:
         university: Kent State University
         time: 1995 - 1999
         details: |
-          Describe your study here lorem ipsum dolor sit amet, consectetuer
-          adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum
-          sociis natoque penatibus et magnis dis parturient montes, nascetur
-          ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu,
-          pretium quis, sem.
-            - Bullet point
-            - Bullet point
-            - Bullet point
 
 experiences:
     title: Experiences
@@ -225,22 +217,16 @@ skills:
     title: Skills &amp; Proficiency
 
     toolset:
-      - name: Python & Django
-        level: 98%
+      - name: Linux
+        level: 90%
 
-      - name: Javascript & jQuery
-        level: 98%
+      - name: Python
+        level: 80%
 
-      - name: Angular
-        level: 98%
+      - name: Bash
+        level: 80%
 
-      - name: HTML5 & CSS
-        level: 95%
-
-      - name: Ruby on Rails
-        level: 85%
-
-      - name: Sketch & Photoshop
+      - name: Kubernetes
         level: 60%
 
 footer: >
