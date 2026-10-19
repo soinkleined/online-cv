@@ -164,23 +164,189 @@
     break-after: avoid;
     page-break-after: avoid;
   }
+
+  // Desktop screens float skill names in the left 30% of the row. The printed
+  // page is narrower than 992px, so repeat that rule here.
+  .skillset .item {
+    overflow: hidden;
+  }
+
+  .skillset .level-title {
+    float: left;
+    width: 30%;
+    margin-bottom: 0;
+  }
 }
 
-// html2canvas does not apply @media print. Leave the screen grid, type,
-// and spacing untouched and capture the 1000px card; pdf-generator.js
-// scales that image onto the A4 content box.
+// html2canvas does not apply @media print, and it paints CSS zoom as
+// overlapping glyphs. html2pdf also drops the clone into a 186mm box
+// (A4 width minus the 12mm margin) and clips anything wider. 186mm / 1000px
+// is the same scale the browser print uses, so the PDF is the screen card
+// with every padding and font reduced by that ratio.
+$pdf-scale: 0.70299213;
+@function ps($px) {
+  @return $px * $pdf-scale * 1px;
+}
+
 html.pdf-export,
 body.pdf-export {
-  width: 1000px;
-  min-width: 1000px;
+  width: 186mm;
   margin: 0;
   padding: 0 !important;
   background: #fff !important;
+  font-size: ps(14);
 }
 
 body.pdf-export .wrapper {
-  width: 1000px;
+  display: grid !important;
+  grid-template-columns: repeat(10, 1fr);
+  width: 186mm;
   max-width: none;
   margin: 0;
   box-shadow: none;
+  background: $theme-color;
+}
+
+body.pdf-export .sidebar-wrapper {
+  position: static !important;
+  width: auto !important;
+  min-width: 0;
+  float: none !important;
+  grid-column: span 3;
+  background: $theme-color;
+
+  .profile-container {
+    padding: ps(30);
+  }
+
+  .name {
+    font-size: ps(32);
+    margin-top: 0;
+    margin-bottom: ps(10);
+  }
+
+  .tagline {
+    font-size: ps(16);
+    margin-bottom: 0;
+  }
+
+  .container-block {
+    padding: ps(30);
+  }
+
+  .container-block-title {
+    font-size: ps(16);
+    margin-bottom: ps(15);
+  }
+
+  .contact-list .fas,
+  .contact-list .fab,
+  .contact-list .far {
+    font-size: ps(18);
+    margin-right: ps(5);
+  }
+
+  .contact-list li {
+    margin-bottom: ps(15);
+  }
+
+  .languages-list li,
+  .interests-list li {
+    margin-bottom: ps(10);
+  }
+}
+
+body.pdf-export .main-wrapper {
+  width: auto !important;
+  min-width: 0;
+  margin: 0 !important;
+  float: none !important;
+  grid-column: span 7;
+  box-sizing: border-box;
+  padding: ps(60) !important;
+  background: #fff;
+
+  .section {
+    margin-bottom: ps(60);
+  }
+
+  .section-title {
+    font-size: ps(20);
+    margin-top: 0;
+    margin-bottom: ps(20);
+  }
+
+  .experiences-section .item,
+  .recommendations-section .item,
+  .educations-section .item {
+    margin-bottom: ps(30);
+  }
+
+  .projects-section .item,
+  .oss-section .item,
+  .publications-section .item,
+  .skillset .item {
+    margin-bottom: ps(15);
+  }
+
+  .upper-row,
+  .second-upper-row {
+    position: static;
+    overflow: visible;
+    margin-bottom: ps(2);
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) max-content;
+    column-gap: ps(16);
+    align-items: start;
+  }
+
+  .job-title,
+  .degree,
+  .cert-title,
+  .recommendation-person,
+  .project-title,
+  .publication-title {
+    font-size: ps(16);
+    min-width: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    white-space: normal;
+    overflow-wrap: break-word;
+  }
+
+  .time,
+  .cert-url {
+    position: static !important;
+    top: auto !important;
+    right: auto !important;
+    float: none !important;
+    margin: 0;
+    justify-self: end;
+    align-self: start;
+    white-space: nowrap;
+  }
+
+  .company,
+  .university,
+  .cert-org,
+  .recommendation-role {
+    margin-bottom: ps(10);
+  }
+
+  .details ul {
+    margin-top: 0;
+    margin-bottom: ps(10);
+    padding-left: ps(40);
+  }
+
+  .skillset .item {
+    overflow: hidden;
+  }
+
+  .skillset .level-title {
+    float: left;
+    width: 30%;
+    margin-bottom: 0;
+    font-size: ps(14);
+  }
 }
