@@ -1,293 +1,352 @@
-// Shared by the browser print dialog and the PDF export.
-// Screen layout stays two-column; a printed page is a single A4 flow
-// so jobs, dates, and section headings stay inside the margins.
-@mixin resume-sheet {
-  padding: 0 !important;
-  margin: 0;
-  background: #fff !important;
-  color: $text-color-secondary;
-  font-size: 10.5pt;
-  line-height: 1.35;
+// Browser print and the PDF export both show the on-screen resume:
+// a 3/7 card, sidebar color down the left, main padding and type from
+// the screen stylesheet. They must not become a separate document design.
+//
+// A single CSS-grid row is one box, and Chrome slices through its text.
+// Print therefore flows the main column (sidebar absolutely in the left
+// 30%) so jobs can break between items. The PDF capture keeps the screen
+// grid and slices a flat image, with spacers inserted between items.
 
-  .print-button,
-  .pdf-button,
-  .d-print-none,
-  footer,
-  .footer {
-    display: none !important;
-  }
-
-  .wrapper {
-    display: block;
-    width: 100%;
-    max-width: none;
-    margin: 0;
-    background: #fff;
-    box-shadow: none;
-  }
-
-  .sidebar-wrapper {
-    display: block;
-    width: 100%;
-    background: $theme-color;
-    color: #fff;
-    padding: 2px 0 8px;
-    break-inside: avoid;
-    page-break-inside: avoid;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-
-    a {
-      color: #fff;
-    }
-
-    .profile-container {
-      padding: 0 0 6px;
-      background: transparent;
-      text-align: left;
-    }
-
-    .name {
-      font-size: 22pt;
-      line-height: 1.1;
-      margin-bottom: 2px;
-    }
-
-    .tagline {
-      color: rgba(255, 255, 255, 0.92);
-      font-size: 11pt;
-      line-height: 1.3;
-      margin-bottom: 6px;
-    }
-
-    .container-block {
-      padding: 4px 0 0;
-    }
-
-    .container-block-title {
-      font-size: 8.5pt;
-      letter-spacing: 0.04em;
-      margin: 0;
-    }
-
-    .fas,
-    .fab,
-    .far {
-      width: 1.15em;
-      margin-right: 4px;
-      font-size: 10pt;
-      text-align: center;
-    }
-
-    // Three contact facts per row so a leftover icon does not sit alone.
-    .contact-list {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 2px 14px;
-      margin: 0;
-    }
-
-    .contact-list li {
-      margin: 0;
-      min-width: 0;
-      white-space: nowrap;
-    }
-
-    .languages-container,
-    .interests-container {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: baseline;
-      gap: 2px 8px;
-      padding-top: 6px;
-    }
-
-    .languages-list,
-    .interests-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 2px 12px;
-      margin: 0;
-    }
-
-    .languages-list li,
-    .interests-list li {
-      margin: 0;
-    }
-  }
-
-  .main-wrapper {
-    display: block;
-    width: 100%;
-    padding: 10px 0 0;
-    background: #fff;
-
-    .section {
-      margin-bottom: 8px;
-    }
-
-    .section-title {
-      font-size: 12pt;
-      margin-bottom: 8px;
-      break-inside: avoid;
-      break-after: avoid;
-      page-break-inside: avoid;
-      page-break-after: avoid;
-
-      .fa-stack {
-        position: relative;
-        display: inline-block;
-        width: 1.6em;
-        height: 1.6em;
-        line-height: 1.6em;
-        font-size: 0.75em;
-        vertical-align: -0.25em;
-      }
-    }
-
-    // Every current role fits on one A4 page. Avoid splitting those.
-    // A future role taller than a page can still break: the meta stays
-    // with the first bullet, and each bullet stays intact.
-    .item,
-    .summary,
-    .intro,
-    .skillset,
-    .skillset .item {
-      break-inside: avoid;
-      page-break-inside: avoid;
-    }
-
-    .meta {
-      break-inside: avoid;
-      break-after: avoid;
-      page-break-inside: avoid;
-      page-break-after: avoid;
-    }
-
-    .upper-row,
-    .second-upper-row,
-    .company,
-    .university,
-    .cert-org,
-    .recommendation-role,
-    .details li,
-    .profile-container,
-    .container-block {
-      break-inside: avoid;
-      page-break-inside: avoid;
-    }
-
-    .experiences-section .item,
-    .educations-section .item,
-    .certifications-section .item,
-    .publications-section .item,
-    .projects-section .item,
-    .oss-section .item {
-      margin-bottom: 8px;
-    }
-
-    .upper-row,
-    .second-upper-row {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) max-content;
-      align-items: start;
-      column-gap: 16px;
-      overflow: visible;
-      position: static;
-    }
-
-    .job-title,
-    .degree,
-    .cert-title,
-    .recommendation-person {
-      min-width: 0;
-      font-size: 11pt;
-      line-height: 1.35;
-      white-space: normal;
-      overflow-wrap: break-word;
-    }
-
-    .time,
-    .cert-url {
-      position: static;
-      top: auto;
-      right: auto;
-      float: none;
-      margin: 0;
-      padding: 0;
-      justify-self: end;
-      align-self: start;
-      white-space: nowrap;
-      font-size: 9.5pt;
-      line-height: 1.35;
-    }
-
-    .company,
-    .university,
-    .cert-org,
-    .recommendation-role {
-      margin-bottom: 4px;
-    }
-
-    .details {
-      ul {
-        margin: 0;
-        padding-left: 1.15em;
-      }
-
-      li {
-        margin-bottom: 1px;
-      }
-    }
-
-    a {
-      color: darken($theme-color, 18%);
-      word-break: break-word;
-    }
-  }
-
-  .skillset .item {
-    margin-bottom: 3px;
-  }
-
-  .skillset .level-title {
-    font-size: 10.5pt;
-    font-weight: 500;
-    margin-bottom: 0;
-  }
+@mixin print-color {
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
 }
 
 @media print {
-  // A zero page margin keeps the browser's date/title header out of the
-  // sheet. The padding below is the resume's own margin.
+  // A zero page margin keeps the browser date/title out of the sheet.
+  // The padding below is the margin around the same card the screen shows.
   @page {
     size: A4 portrait;
     margin: 0;
   }
 
+  html,
   body {
-    @include resume-sheet;
+    margin: 0 !important;
+    background: #fff !important;
+    @include print-color;
+  }
+
+  body {
     padding: 12mm !important;
   }
 
-  // Spacers exist only so the PDF slicer lands between items. The browser
-  // print engine paginates with the rules above, so the spacers must not
-  // open empty regions in the print preview.
-  .pdf-page-pad,
-  iframe {
+  .print-button,
+  .pdf-button,
+  .d-print-none,
+  footer,
+  .footer,
+  iframe,
+  .pdf-page-pad {
     display: none !important;
+  }
+
+  // 1000px is the screen wrapper. This zoom fits it in the 186mm content
+  // box (A4 minus the 12mm padding) so screen padding and type keep their
+  // proportions. The wrapper itself stays transparent: a fixed rail paints
+  // the sidebar color, including on later pages.
+  .wrapper {
+    display: block !important;
+    width: 1000px !important;
+    max-width: none !important;
+    margin: 0 !important;
+    zoom: 0.70299213;
+    position: relative;
+    z-index: 1;
+    box-shadow: none !important;
+    background: transparent !important;
+    @include print-color;
+  }
+
+  // 30% of the 186mm card, same ratio as the 3-column sidebar. Fixed so the
+  // color repeats on every printed page instead of stopping after page 1.
+  body::before {
+    content: "";
+    position: fixed;
+    z-index: 0;
+    top: 0;
+    bottom: 0;
+    left: 12mm;
+    width: 55.8mm;
+    background: $theme-color;
+    pointer-events: none;
+    @include print-color;
+  }
+
+  .sidebar-wrapper {
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    width: 30% !important;
+    height: auto;
+    float: none !important;
+    z-index: 1;
+    box-sizing: border-box;
+    background: $theme-color !important;
+    @include print-color;
+  }
+
+  .main-wrapper {
+    box-sizing: border-box !important;
+    width: 70% !important;
+    margin-left: 30% !important;
+    float: none !important;
+    padding: 60px !important;
+    background: #fff !important;
+    position: relative;
+    z-index: 1;
+    @include print-color;
+  }
+
+  // Screen rhythm. Repeated here so a narrow print viewport cannot swap in
+  // the stacked mobile padding or an overlapping date.
+  .main-wrapper .section {
+    margin-bottom: 60px;
+  }
+
+  .main-wrapper .experiences-section .item,
+  .main-wrapper .recommendations-section .item,
+  .main-wrapper .educations-section .item {
+    margin-bottom: 30px;
+  }
+
+  .main-wrapper .upper-row,
+  .main-wrapper .second-upper-row {
+    position: static;
+    overflow: visible;
+    margin-bottom: 2px;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) max-content;
+    column-gap: 16px;
+    align-items: start;
+  }
+
+  .main-wrapper .job-title,
+  .main-wrapper .degree,
+  .main-wrapper .cert-title,
+  .main-wrapper .recommendation-person {
+    min-width: 0;
+    white-space: normal;
+    overflow-wrap: break-word;
+  }
+
+  .main-wrapper .time,
+  .main-wrapper .cert-url {
+    position: static !important;
+    top: auto !important;
+    right: auto !important;
+    float: none !important;
+    margin: 0;
+    justify-self: end;
+    align-self: start;
+    white-space: nowrap;
+  }
+
+  // Jobs that fit move as a whole. A job taller than the page ignores the
+  // item rule and breaks at a bullet; the title row stays with the first one.
+  .main-wrapper .item,
+  .main-wrapper .summary,
+  .main-wrapper .intro,
+  .main-wrapper .skillset .item,
+  .main-wrapper .section-title,
+  .main-wrapper .meta,
+  .main-wrapper .upper-row,
+  .main-wrapper .second-upper-row,
+  .main-wrapper .company,
+  .main-wrapper .university,
+  .main-wrapper .details li {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .main-wrapper .section-title,
+  .main-wrapper .meta {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  // Desktop screens float skill names in the left 30% of the row. The printed
+  // page is narrower than 992px, so repeat that rule here.
+  .skillset .item {
+    overflow: hidden;
+  }
+
+  .skillset .level-title {
+    float: left;
+    width: 30%;
+    margin-bottom: 0;
   }
 }
 
-// html2canvas does not apply @media print, so the PDF export
-// adds this class to the print document before capture.
+// html2canvas does not apply @media print, and it paints CSS zoom as
+// overlapping glyphs. html2pdf also drops the clone into a 186mm box
+// (A4 width minus the 12mm margin) and clips anything wider. 186mm / 1000px
+// is the same scale the browser print uses, so the PDF is the screen card
+// with every padding and font reduced by that ratio.
+$pdf-scale: 0.70299213;
+@function ps($px) {
+  @return $px * $pdf-scale * 1px;
+}
+
 html.pdf-export,
 body.pdf-export {
   width: 186mm;
-  min-width: 186mm;
-  background: #fff;
+  margin: 0;
+  padding: 0 !important;
+  background: #fff !important;
+  font-size: ps(14);
 }
 
-body.pdf-export {
-  @include resume-sheet;
+body.pdf-export .wrapper {
+  display: grid !important;
+  grid-template-columns: repeat(10, 1fr);
+  width: 186mm;
+  max-width: none;
+  margin: 0;
+  box-shadow: none;
+  background: $theme-color;
+}
+
+body.pdf-export .sidebar-wrapper {
+  position: static !important;
+  width: auto !important;
+  min-width: 0;
+  float: none !important;
+  grid-column: span 3;
+  background: $theme-color;
+
+  .profile-container {
+    padding: ps(30);
+  }
+
+  .name {
+    font-size: ps(32);
+    margin-top: 0;
+    margin-bottom: ps(10);
+  }
+
+  .tagline {
+    font-size: ps(16);
+    margin-bottom: 0;
+  }
+
+  .container-block {
+    padding: ps(30);
+  }
+
+  .container-block-title {
+    font-size: ps(16);
+    margin-bottom: ps(15);
+  }
+
+  .contact-list .fas,
+  .contact-list .fab,
+  .contact-list .far {
+    font-size: ps(18);
+    margin-right: ps(5);
+  }
+
+  .contact-list li {
+    margin-bottom: ps(15);
+  }
+
+  .languages-list li,
+  .interests-list li {
+    margin-bottom: ps(10);
+  }
+}
+
+body.pdf-export .main-wrapper {
+  width: auto !important;
+  min-width: 0;
+  margin: 0 !important;
+  float: none !important;
+  grid-column: span 7;
+  box-sizing: border-box;
+  padding: ps(60) !important;
+  background: #fff;
+
+  .section {
+    margin-bottom: ps(60);
+  }
+
+  .section-title {
+    font-size: ps(20);
+    margin-top: 0;
+    margin-bottom: ps(20);
+  }
+
+  .experiences-section .item,
+  .recommendations-section .item,
+  .educations-section .item {
+    margin-bottom: ps(30);
+  }
+
+  .projects-section .item,
+  .oss-section .item,
+  .publications-section .item,
+  .skillset .item {
+    margin-bottom: ps(15);
+  }
+
+  .upper-row,
+  .second-upper-row {
+    position: static;
+    overflow: visible;
+    margin-bottom: ps(2);
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) max-content;
+    column-gap: ps(16);
+    align-items: start;
+  }
+
+  .job-title,
+  .degree,
+  .cert-title,
+  .recommendation-person,
+  .project-title,
+  .publication-title {
+    font-size: ps(16);
+    min-width: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    white-space: normal;
+    overflow-wrap: break-word;
+  }
+
+  .time,
+  .cert-url {
+    position: static !important;
+    top: auto !important;
+    right: auto !important;
+    float: none !important;
+    margin: 0;
+    justify-self: end;
+    align-self: start;
+    white-space: nowrap;
+  }
+
+  .company,
+  .university,
+  .cert-org,
+  .recommendation-role {
+    margin-bottom: ps(10);
+  }
+
+  .details ul {
+    margin-top: 0;
+    margin-bottom: ps(10);
+    padding-left: ps(40);
+  }
+
+  .skillset .item {
+    overflow: hidden;
+  }
+
+  .skillset .level-title {
+    float: left;
+    width: 30%;
+    margin-bottom: 0;
+    font-size: ps(14);
+  }
 }

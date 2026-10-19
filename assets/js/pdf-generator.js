@@ -47,29 +47,33 @@ function framePdfOptions(win, filename, windowWidth) {
   )(filename, windowWidth);
 }
 
-// Same pixel size html2pdf uses when it slices the canvas (jsPDF toPx).
-function pdfContentBox() {
-  var k = 72 / 25.4;
-  function toPx(mm) {
-    return Math.floor((mm * k) / 72 * 96);
-  }
+// html2pdf slices the canvas with innerHeight / innerWidth, then scales the
+// image to the A4 content box (12mm margin). Page breaks are measured in the
+// 1000px screen card so the captured layout matches the site.
+function pdfContentBox(widthPx) {
+  var innerW = 210 - 24;
+  var innerH = 297 - 24;
   return {
-    pageHeight: toPx(297 - 24),
-    contentWidth: toPx(210 - 24),
+    pageHeight: widthPx * (innerH / innerW),
+    contentWidth: widthPx,
   };
 }
 
 // Move whole roles that fit on one page. A role taller than a page breaks
 // before a bullet, with its title row kept on the same page as the first bullet.
 function paginateResume(doc, root) {
-  var box = pdfContentBox();
-  var pageHeight = box.pageHeight;
-  var contentWidth = box.contentWidth;
-  var safety = 6;
-
+  // Match html2pdf's clone box (A4 width minus 12mm). A wider card is clipped.
   root.style.boxSizing = "border-box";
-  root.style.width = contentWidth + "px";
-  root.style.maxWidth = contentWidth + "px";
+  root.style.width = "186mm";
+  root.style.maxWidth = "none";
+  root.style.zoom = "1";
+
+  var contentWidth = root.getBoundingClientRect().width;
+  var box = pdfContentBox(Math.ceil(contentWidth));
+  // html2canvas ceil's the css width, draws at scale 2, and html2pdf floors
+  // the slice to canvas px. Match that so spacers land on the cut.
+  var pageHeight = Math.floor(box.contentWidth * 2 * (box.pageHeight / box.contentWidth)) / 2;
+  var safety = 10;
 
   function origin() {
     return root.getBoundingClientRect().top;
@@ -135,9 +139,9 @@ function paginateResume(doc, root) {
     }
   }
 
-  var sidebar = root.querySelector(".sidebar-wrapper");
-  if (sidebar && crosses(sidebar)) pushToNext(sidebar);
-
+  // The sidebar is the left column of the screen card. Pushing it would
+  // open a gap at the top of the main column instead of keeping the name
+  // aligned with the first section.
   var sections = root.querySelectorAll(".main-wrapper .section");
   for (var s = 0; s < sections.length; s++) {
     var section = sections[s];
@@ -158,6 +162,7 @@ function paginateResume(doc, root) {
       if (!el.getClientRects().length) continue;
       if (el.classList.contains("section-title") && blocks[b + 1]) {
         keepWithFollowing(el, blocks[b + 1]);
+        if (crosses(el)) pushToNext(el);
         continue;
       }
       if (tooTall(el)) splitTall(el);
@@ -181,7 +186,7 @@ function generatePDF() {
   // Off-screen and transparent. A negative z-index still paints over the
   // page, and display:none would make the print document measure as empty.
   iframe.style.cssText =
-    "position:fixed;left:-2400px;top:0;width:186mm;height:297mm;border:0;opacity:0;pointer-events:none;";
+    "position:fixed;left:-2400px;top:0;width:186mm;height:1400px;border:0;opacity:0;pointer-events:none;";
   iframe.src = resumePrintUrl();
 
   function finish() {
@@ -203,6 +208,11 @@ function generatePDF() {
 
     doc.documentElement.classList.add("pdf-export");
     doc.body.classList.add("pdf-export");
+    // The clone window must be the same width as the 186mm card. A wider
+    // windowWidth recenters html2pdf's absolute box and clips the dates.
+    doc.documentElement.style.width = "186mm";
+    doc.body.style.width = "186mm";
+    doc.body.style.margin = "0";
     doc.documentElement.style.overflow = "hidden";
     doc.body.style.overflow = "hidden";
 
