@@ -100,9 +100,23 @@
       page-break-after: avoid;
     }
 
-    .item,
-    .container-block,
-    .summary {
+    // A whole job may be taller than one page, so do not freeze .item.
+    // Keep each title/date row and each bullet intact; the PDF paginator
+    // inserts the same breaks because html2canvas ignores these rules.
+    .upper-row,
+    .second-upper-row,
+    .company,
+    .university,
+    .cert-org,
+    .recommendation-role,
+    .details li,
+    .summary,
+    .skillset .item,
+    .projects-section .item,
+    .oss-section .item,
+    .publications-section .item,
+    .profile-container,
+    .container-block {
       break-inside: avoid;
       page-break-inside: avoid;
     }
@@ -118,21 +132,23 @@
 
     .upper-row,
     .second-upper-row {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 12px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) max-content;
+      align-items: start;
+      column-gap: 16px;
       overflow: visible;
+      position: static;
     }
 
     .job-title,
     .degree,
     .cert-title,
     .recommendation-person {
-      flex: 1 1 auto;
       min-width: 0;
       font-size: 11pt;
-      line-height: 1.3;
+      line-height: 1.35;
+      white-space: normal;
+      overflow-wrap: break-word;
     }
 
     .time,
@@ -140,11 +156,14 @@
       position: static;
       top: auto;
       right: auto;
-      flex: 0 0 auto;
-      margin-left: auto;
+      float: none;
+      margin: 0;
       padding: 0;
+      justify-self: end;
+      align-self: start;
       white-space: nowrap;
       font-size: 9.5pt;
+      line-height: 1.35;
     }
 
     .company,

@@ -4,8 +4,10 @@
 title: David Klein
 url: 'http://webjeda.com'
 
-#change it according to your repository name
-# disabling since we are using a custom domain
+# GitHub Pages project sites inject baseurl /online-cv when they build.
+# Leave this unset so `jekyll serve` at / still loads assets from /assets.
+# Preview the project-site path with:
+#   bundle exec jekyll serve --baseurl /online-cv
 #baseurl: '/online-cv' 
 
 description: Cloud and Infrastructure Services Engineering
