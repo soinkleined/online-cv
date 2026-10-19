@@ -1,61 +1,207 @@
+// Shared by the browser print dialog and the PDF export.
+// Screen layout stays two-column; a printed page is a single A4 flow
+// so jobs, dates, and section headings stay inside the margins.
+@mixin resume-sheet {
+  padding: 0 !important;
+  margin: 0;
+  background: #fff !important;
+  color: $text-color-secondary;
+  font-size: 10.5pt;
+  line-height: 1.4;
+
+  .print-button,
+  .pdf-button,
+  .d-print-none,
+  footer,
+  .footer {
+    display: none !important;
+  }
+
+  .wrapper {
+    display: block;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    background: #fff;
+    box-shadow: none;
+  }
+
+  .sidebar-wrapper {
+    display: block;
+    width: 100%;
+    background: $theme-color;
+    color: #fff;
+    break-inside: avoid;
+    page-break-inside: avoid;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+
+    a {
+      color: #fff;
+    }
+
+    .profile-container {
+      padding: 0 0 8px;
+      background: transparent;
+      text-align: left;
+    }
+
+    .name {
+      font-size: 20pt;
+      line-height: 1.15;
+      margin-bottom: 2px;
+    }
+
+    .tagline {
+      color: rgba(255, 255, 255, 0.88);
+      font-size: 11pt;
+      line-height: 1.3;
+    }
+
+    .container-block {
+      padding: 8px 0 0;
+    }
+
+    .container-block-title {
+      font-size: 9pt;
+      margin-bottom: 4px;
+    }
+
+    .contact-list,
+    .languages-list,
+    .interests-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2px 14px;
+      margin: 0;
+    }
+
+    .contact-list li,
+    .languages-list li,
+    .interests-list li {
+      margin: 0;
+    }
+  }
+
+  .main-wrapper {
+    display: block;
+    width: 100%;
+    padding: 14px 0 0;
+    background: #fff;
+
+    .section {
+      margin-bottom: 14px;
+    }
+
+    .section-title {
+      font-size: 12pt;
+      margin-bottom: 8px;
+      break-after: avoid;
+      page-break-after: avoid;
+    }
+
+    .item,
+    .container-block,
+    .summary {
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    .experiences-section .item,
+    .educations-section .item,
+    .certifications-section .item,
+    .publications-section .item,
+    .projects-section .item,
+    .oss-section .item {
+      margin-bottom: 10px;
+    }
+
+    .upper-row,
+    .second-upper-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      overflow: visible;
+    }
+
+    .job-title,
+    .degree,
+    .cert-title,
+    .recommendation-person {
+      flex: 1 1 auto;
+      min-width: 0;
+      font-size: 11pt;
+      line-height: 1.3;
+    }
+
+    .time,
+    .cert-url {
+      position: static;
+      top: auto;
+      right: auto;
+      flex: 0 0 auto;
+      margin-left: auto;
+      padding: 0;
+      white-space: nowrap;
+      font-size: 9.5pt;
+    }
+
+    .company,
+    .university,
+    .cert-org,
+    .recommendation-role {
+      margin-bottom: 4px;
+    }
+
+    .details {
+      ul {
+        margin: 0;
+        padding-left: 1.15em;
+      }
+
+      li {
+        margin-bottom: 2px;
+      }
+    }
+
+    a {
+      color: darken($theme-color, 18%);
+      word-break: break-word;
+    }
+  }
+
+  .skillset .item {
+    margin-bottom: 3px;
+  }
+
+  .skillset .level-title {
+    font-size: 10.5pt;
+    font-weight: 500;
+    margin-bottom: 0;
+  }
+}
+
 @media print {
   @page {
-    size: A4;
+    size: A4 portrait;
+    margin: 12mm 12mm 14mm;
   }
+
   body {
-    font-size: 9pt;
-    background-color: white;
-    padding: 0;
+    @include resume-sheet;
   }
-  .wrapper {
-    max-width: 100%;
-  }
+}
 
-  //   img.avatar {
-  //     filter: grayscale(1);
-  //     -webkit-filter: greyscale(1);
-  //   }
-  .main-wrapper .time {
-    padding: 10px 30px 10px 10px;
-    //  float: right;
-    //  color: black !important;
-    -webkit-print-color-adjust: exact;
-  }
-  .sidebar-wrapper {
-    position: static;
-    //  float: right;
-    //  width: 40%;
-    -webkit-print-color-adjust: exact;
-  }
+// html2canvas does not apply @media print, so the PDF export
+// adds this class to the print document before capture.
+html.pdf-export,
+body.pdf-export {
+  width: 186mm;
+  min-width: 186mm;
+  background: #fff;
+}
 
-  .remove-container.container-block {
-    display: none;
-  }
-
-  footer {
-    display: none;
-  }
-
-  .skillset,
-  .container-block {
-    break-inside: avoid;
-  }
-
-  .skillset .level-bar-inner {
-    background-color: $theme-color !important;
-    -webkit-print-color-adjust: exact;
-  }
-
-   .fa-inverse,
-   .fa-inverse:after,
-   .fa-inverse:before {
-     color: #ffffff !important;
-   }
-
-    /* Hide buttons when printing */
-    .print-button,
-    .pdf-button,
-    .d-print-none {
-        display: none !important;
-    }
+body.pdf-export {
+  @include resume-sheet;
 }
