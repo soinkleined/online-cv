@@ -7,7 +7,7 @@
   background: #fff !important;
   color: $text-color-secondary;
   font-size: 10.5pt;
-  line-height: 1.4;
+  line-height: 1.35;
 
   .print-button,
   .pdf-button,
@@ -31,6 +31,7 @@
     width: 100%;
     background: $theme-color;
     color: #fff;
+    padding: 2px 0 8px;
     break-inside: avoid;
     page-break-inside: avoid;
     -webkit-print-color-adjust: exact;
@@ -41,42 +42,74 @@
     }
 
     .profile-container {
-      padding: 0 0 8px;
+      padding: 0 0 6px;
       background: transparent;
       text-align: left;
     }
 
     .name {
-      font-size: 20pt;
-      line-height: 1.15;
+      font-size: 22pt;
+      line-height: 1.1;
       margin-bottom: 2px;
     }
 
     .tagline {
-      color: rgba(255, 255, 255, 0.88);
+      color: rgba(255, 255, 255, 0.92);
       font-size: 11pt;
       line-height: 1.3;
+      margin-bottom: 6px;
     }
 
     .container-block {
-      padding: 8px 0 0;
+      padding: 4px 0 0;
     }
 
     .container-block-title {
-      font-size: 9pt;
-      margin-bottom: 4px;
+      font-size: 8.5pt;
+      letter-spacing: 0.04em;
+      margin: 0;
     }
 
-    .contact-list,
-    .languages-list,
-    .interests-list {
-      display: flex;
-      flex-wrap: wrap;
+    .fas,
+    .fab,
+    .far {
+      width: 1.15em;
+      margin-right: 4px;
+      font-size: 10pt;
+      text-align: center;
+    }
+
+    // Three contact facts per row so a leftover icon does not sit alone.
+    .contact-list {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 2px 14px;
       margin: 0;
     }
 
-    .contact-list li,
+    .contact-list li {
+      margin: 0;
+      min-width: 0;
+      white-space: nowrap;
+    }
+
+    .languages-container,
+    .interests-container {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 2px 8px;
+      padding-top: 6px;
+    }
+
+    .languages-list,
+    .interests-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2px 12px;
+      margin: 0;
+    }
+
     .languages-list li,
     .interests-list li {
       margin: 0;
@@ -86,23 +119,51 @@
   .main-wrapper {
     display: block;
     width: 100%;
-    padding: 14px 0 0;
+    padding: 10px 0 0;
     background: #fff;
 
     .section {
-      margin-bottom: 14px;
+      margin-bottom: 8px;
     }
 
     .section-title {
       font-size: 12pt;
       margin-bottom: 8px;
+      break-inside: avoid;
       break-after: avoid;
+      page-break-inside: avoid;
+      page-break-after: avoid;
+
+      .fa-stack {
+        position: relative;
+        display: inline-block;
+        width: 1.6em;
+        height: 1.6em;
+        line-height: 1.6em;
+        font-size: 0.75em;
+        vertical-align: -0.25em;
+      }
+    }
+
+    // Every current role fits on one A4 page. Avoid splitting those.
+    // A future role taller than a page can still break: the meta stays
+    // with the first bullet, and each bullet stays intact.
+    .item,
+    .summary,
+    .intro,
+    .skillset,
+    .skillset .item {
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    .meta {
+      break-inside: avoid;
+      break-after: avoid;
+      page-break-inside: avoid;
       page-break-after: avoid;
     }
 
-    // A whole job may be taller than one page, so do not freeze .item.
-    // Keep each title/date row and each bullet intact; the PDF paginator
-    // inserts the same breaks because html2canvas ignores these rules.
     .upper-row,
     .second-upper-row,
     .company,
@@ -110,11 +171,6 @@
     .cert-org,
     .recommendation-role,
     .details li,
-    .summary,
-    .skillset .item,
-    .projects-section .item,
-    .oss-section .item,
-    .publications-section .item,
     .profile-container,
     .container-block {
       break-inside: avoid;
@@ -127,7 +183,7 @@
     .publications-section .item,
     .projects-section .item,
     .oss-section .item {
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
 
     .upper-row,
@@ -180,7 +236,7 @@
       }
 
       li {
-        margin-bottom: 2px;
+        margin-bottom: 1px;
       }
     }
 
@@ -204,11 +260,19 @@
 @media print {
   @page {
     size: A4 portrait;
-    margin: 12mm 12mm 14mm;
+    margin: 12mm;
   }
 
   body {
     @include resume-sheet;
+  }
+
+  // Spacers exist only so the PDF slicer lands between items. The browser
+  // print engine paginates with the rules above, so the spacers must not
+  // open empty regions in the print preview.
+  .pdf-page-pad,
+  iframe {
+    display: none !important;
   }
 }
 
