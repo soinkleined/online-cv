@@ -184,14 +184,17 @@ p {
       margin-bottom: 30px;
     }
   }
+  // Two columns: the title wraps in the first, the date stays in the second.
+  // A flex row with position:absolute dates let long titles paint through the date.
   .upper-row,
   .second-upper-row {
-    position: relative;
+    position: static;
     overflow: visible;
     margin-bottom: 2px;
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) max-content;
+    column-gap: 16px;
+    align-items: start;
   }
   .job-title,
   .degree,
@@ -202,8 +205,10 @@ p {
     margin-top: 0;
     margin-bottom: 0;
     font-weight: 500;
-    flex: 1 1 auto;
     min-width: 0;
+    line-height: 1.35;
+    white-space: normal;
+    overflow-wrap: break-word;
   }
 
   .time,
@@ -211,10 +216,13 @@ p {
     position: static;
     top: auto;
     right: auto;
+    float: none;
     color: $text-grey;
-    flex: 0 0 auto;
-    margin-left: auto;
+    margin: 0;
+    justify-self: end;
+    align-self: start;
     white-space: nowrap;
+    line-height: 1.35;
   }
   .company,
   .recommendation-role,

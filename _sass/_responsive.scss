@@ -17,14 +17,23 @@
     padding: 30px;
   }
 
-  .main-wrapper .time {
-    position: static;
-    display: block;
-    margin-top: 5px;
+  .main-wrapper .upper-row,
+  .main-wrapper .second-upper-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) max-content;
+    column-gap: 16px;
+    align-items: start;
+    margin-bottom: 2px;
   }
 
-  .main-wrapper .upper-row {
-    margin-bottom: 0;
+  .main-wrapper .time,
+  .main-wrapper .cert-url {
+    position: static;
+    float: none;
+    display: block;
+    margin-top: 0;
+    justify-self: end;
+    white-space: nowrap;
   }
 }
 /* Small devices (tablets, 768px and up) */
