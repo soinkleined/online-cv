@@ -258,13 +258,16 @@
 }
 
 @media print {
+  // A zero page margin keeps the browser's date/title header out of the
+  // sheet. The padding below is the resume's own margin.
   @page {
     size: A4 portrait;
-    margin: 12mm;
+    margin: 0;
   }
 
   body {
     @include resume-sheet;
+    padding: 12mm !important;
   }
 
   // Spacers exist only so the PDF slicer lands between items. The browser

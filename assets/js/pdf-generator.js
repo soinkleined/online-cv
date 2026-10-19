@@ -178,8 +178,10 @@ function generatePDF() {
 
   var iframe = document.createElement("iframe");
   iframe.setAttribute("aria-hidden", "true");
+  // Off-screen and transparent. A negative z-index still paints over the
+  // page, and display:none would make the print document measure as empty.
   iframe.style.cssText =
-    "position:fixed;left:0;top:0;width:186mm;height:297mm;border:0;z-index:-1;overflow:hidden;";
+    "position:fixed;left:-2400px;top:0;width:186mm;height:297mm;border:0;opacity:0;pointer-events:none;";
   iframe.src = resumePrintUrl();
 
   function finish() {
