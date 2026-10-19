@@ -187,9 +187,11 @@ p {
   .upper-row,
   .second-upper-row {
     position: relative;
-    overflow: hidden;
+    overflow: visible;
     margin-bottom: 2px;
     display: flex;
+    align-items: flex-start;
+    gap: 12px;
   }
   .job-title,
   .degree,
@@ -200,16 +202,19 @@ p {
     margin-top: 0;
     margin-bottom: 0;
     font-weight: 500;
-    flex: 75%;
+    flex: 1 1 auto;
+    min-width: 0;
   }
 
   .time,
   .cert-url {
-    position: absolute;
-    right: 0;
-    top: 0;
+    position: static;
+    top: auto;
+    right: auto;
     color: $text-grey;
-    flex: 25%;
+    flex: 0 0 auto;
+    margin-left: auto;
+    white-space: nowrap;
   }
   .company,
   .recommendation-role,
