@@ -14,7 +14,9 @@ function resumeFilename(root) {
 
 function pdfOptions(filename) {
   return {
-    margin: [12, 12, 14, 12],
+    // A single number is required: html2pdf rejects a margin array that
+    // was created in the parent page and passed into the print frame.
+    margin: 12,
     filename: filename,
     pagebreak: {
       mode: ["css", "legacy"],
@@ -80,7 +82,11 @@ function generatePDF() {
         .set(options)
         .from(wrapper)
         .save()
-        .then(finish)
+        .then(function () {
+          // html2pdf clicks the download link on a later turn. Removing the
+          // frame before that turn cancels the save.
+          setTimeout(finish, 1000);
+        })
         .catch(function (err) {
           console.error("Error generating PDF:", err);
           finish();
